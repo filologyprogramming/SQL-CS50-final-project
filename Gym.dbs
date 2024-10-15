@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="schema.sql" id="Project-133" database="Sqlite" >
+	<schema name="public" >
+		<table name="cards" generator_rows="3" spec="" >
+			<column name="id" type="INTEGER" jt="4" />
+			<column name="name" type="TEXT" jt="-1" mandatory="y" regexp="(Standard|Silver|Premium)" />
+			<index name="pk_cards" unique="UNIQUE_KEY" >
+				<column name="id" />
+			</index>
+			<constraint name="Cns_cards_name" >
+				<string><![CDATA["name" IN ('Standard', 'Silver', 'Premium')]]></string>
+			</constraint>
+		</table>
+		<table name="class_trainer" generator_rows="5000" spec="" >
+			<column name="id" type="INTEGER" jt="4" />
+			<column name="class" type="INTEGER" jt="4" mandatory="y" />
+			<column name="trainer" type="INTEGER" jt="4" mandatory="y" />
+			<index name="unq_class_trainer_class" unique="UNIQUE_KEY" >
+				<column name="class" />
+			</index>
+			<index name="pk_class_trainer" unique="UNIQUE_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="FK_class_trainer classes" to_schema="public" to_table="classes" options="" >
+				<fk_column name="class" pk="id" />
+			</fk>
+			<fk name="FK_class_trainer trainers" to_schema="public" to_table="trainers" options="" >
+				<fk_column name="trainer" pk="id" />
+			</fk>
+		</table>
+		<table name="classes" generator_rows="27" spec="" >
+			<column name="id" type="INTEGER" jt="4" />
+			<column name="name" type="TEXT" jt="-1" mandatory="y" regexp="($First Name)" />
+			<column name="intensity" type="TEXT" jt="-1" mandatory="y" regexp="(low|medium|high)" />
+			<column name="length" type="INTEGER" jt="4" mandatory="y" regexp="int:from=30;to=90;" />
+			<column name="day_of_conduct" type="TEXT" jt="-1" mandatory="y" regexp="(Monday|Tuesday|Wednesdsay|Thursday|Friday)" />
+			<column name="card" type="INTEGER" jt="4" />
+			<column name="gym" type="INTEGER" jt="4" mandatory="y" />
+			<index name="pk_classes" unique="UNIQUE_KEY" >
+				<column name="id" />
+			</index>
+			<constraint name="Cns_classes_intensity" >
+				<string><![CDATA["intensity" IN ('low', 'moderate', 'high')]]></string>
+			</constraint>
+			<constraint name="Cns_classes_card" >
+				<string><![CDATA["card" IN (1, 2, 3)]]></string>
+			</constraint>
+			<fk name="FK_classes cards" to_schema="public" to_table="cards" options="" >
+				<fk_column name="card" pk="id" />
+			</fk>
+			<fk name="FK_classes gyms" to_schema="public" to_table="gyms" options="" >
+				<fk_column name="gym" pk="id" />
+			</fk>
+		</table>
+		<table name="client_class" generator_rows="2000000" spec="" >
+			<column name="id" type="INTEGER" jt="4" />
+			<column name="client" type="INTEGER" jt="4" mandatory="y" />
+			<column name="class" type="INTEGER" jt="4" />
+			<index name="pk_client_class" unique="UNIQUE_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="FK_client_class clients" to_schema="public" to_table="clients" options="" >
+				<fk_column name="client" pk="id" />
+			</fk>
+			<fk name="FK_client_class classes" to_schema="public" to_table="classes" options="" >
+				<fk_column name="class" pk="id" />
+			</fk>
+		</table>
+		<table name="client_trainer" generator_rows="57456" spec="" >
+			<column name="id" type="INTEGER" jt="4" />
+			<column name="client" type="INTEGER" jt="4" mandatory="y" />
+			<column name="trainer" type="INTEGER" jt="4" />
+			<index name="unq_client_trainer_client" unique="UNIQUE_KEY" >
+				<column name="client" />
+			</index>
+			<index name="pk_client_trainer" unique="UNIQUE_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="FK_client_trainer clients" to_schema="public" to_table="clients" options="" >
+				<fk_column name="client" pk="id" />
+			</fk>
+			<fk name="FK_client_trainer trainers" to_schema="public" to_table="trainers" options="" >
+				<fk_column name="trainer" pk="id" />
+			</fk>
+		</table>
+		<table name="clients" generator_rows="567456" spec="" >
+			<column name="id" type="INTEGER" jt="4" />
+			<column name="first_name" type="TEXT" jt="-1" mandatory="y" />
+			<column name="last_name" type="TEXT" jt="-1" mandatory="y" />
+			<column name="date_of_birth" type="TEXT" jt="-1" mandatory="y" regexp="date:from=&#039;01.01.1900&#039;;to=&#039;01.01.2009&#039;;" />
+			<column name="PESEL" type="TEXT" jt="-1" mandatory="y" regexp="[0-9]{11}" />
+			<column name="card" type="INTEGER" jt="4" mandatory="y" />
+			<column name="gym" type="INTEGER" jt="4" mandatory="y" />
+			<index name="unq_clients_PESEL" unique="UNIQUE_KEY" >
+				<column name="PESEL" />
+			</index>
+			<index name="pk_clients" unique="UNIQUE_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="FK_clients cards" to_schema="public" to_table="cards" options="" >
+				<fk_column name="card" pk="id" />
+			</fk>
+			<fk name="FK_clients gyms" to_schema="public" to_table="gyms" options="" >
+				<fk_column name="gym" pk="id" />
+			</fk>
+		</table>
+		<table name="gyms" generator_rows="30" spec="" >
+			<column name="id" type="INTEGER" jt="4" />
+			<column name="name" type="TEXT" jt="-1" mandatory="y" regexp="($First Name)" />
+			<column name="city" type="TEXT" jt="-1" mandatory="y" />
+			<column name="voivodeship" type="TEXT" jt="-1" mandatory="y" regexp="list:file=NamesLast.txt" />
+			<index name="unq_gyms_name" unique="UNIQUE_KEY" >
+				<column name="name" />
+			</index>
+			<index name="pk_gyms" unique="UNIQUE_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="trainers" generator_rows="150" spec="" >
+			<column name="id" type="INTEGER" jt="4" />
+			<column name="first_name" type="TEXT" jt="-1" mandatory="y" />
+			<column name="last_name" type="TEXT" jt="-1" mandatory="y" />
+			<column name="date_of_birth" type="TEXT" jt="-1" mandatory="y" regexp="date:from=&#039;01.01.1910&#039;;to=&#039;01.01.2009&#039;;" />
+			<column name="PESEL" type="TEXT" jt="-1" mandatory="y" regexp="[0-9]{11}" />
+			<column name="gym" type="INTEGER" jt="4" mandatory="y" />
+			<index name="unq_trainers_PESEL" unique="UNIQUE_KEY" >
+				<column name="PESEL" />
+			</index>
+			<index name="pk_trainers" unique="UNIQUE_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="FK_trainers gyms" to_schema="public" to_table="gyms" options="" >
+				<fk_column name="gym" pk="id" />
+			</fk>
+		</table>
+		<trigger name="class_trainer" id="Trigger-1047" isSystem="false" >
+			<string><![CDATA[CREATE TRIGGER class_trainer
+BEFORE INSERT ON class_trainer
+FOR EACH ROW
+BEGIN
+    SELECT RAISE (ABORT, 'Wrong Gym')
+    WHERE NOT EXISTS (
+        SELECT 1
+        FROM trainers
+        JOIN gyms ON gyms.id = trainers.gym
+        JOIN classes ON classes.gym = gyms.id
+        WHERE NEW.class = classes.id
+        AND NEW.trainer = trainers.id
+        AND trainers.gym = classes.gym
+    );
+END;]]></string>
+		</trigger>
+		<trigger name="client_gym" id="Trigger-2b8" isSystem="false" >
+			<string><![CDATA[CREATE TRIGGER client_gym
+BEFORE INSERT ON client_class
+FOR EACH ROW
+BEGIN
+    SELECT RAISE (ABORT, 'Wrong Gym')
+    WHERE NOT EXISTS (
+        SELECT 1
+        FROM clients
+        JOIN gyms ON gyms.id = clients.gym
+        JOIN classes ON classes.gym = gyms.id
+        WHERE NEW.client = clients.id
+        AND NEW.class = classes.id
+        AND clients.gym = gyms.id
+        );
+END;
+
+-- Make sure client id is correct
+-- Make sure class id is correct
+-- Check if the client signs-up to the right trainer]]></string>
+		</trigger>
+		<trigger name="client_joining_class" id="Trigger-85a" isSystem="false" >
+			<string><![CDATA[CREATE TRIGGER client_joining_class
+BEFORE INSERT ON client_class
+FOR EACH ROW
+BEGIN
+    SELECT RAISE (ABORT, 'Client does not have access.')
+    WHERE NOT EXISTS (
+        SELECT 1
+        FROM clients
+        JOIN cards ON cards.id = clients.card
+        WHERE clients.id = NEW.client
+        AND CAST (NEW.class AS INTEGER) <= CAST (cards.id AS INTEGER)
+    );
+END;
+
+-- Check if a person joins the class in the correct gym
+-- Make sure client id is correct
+-- Make sure class id is correct
+-- Check if the client signs-up to the right gym]]></string>
+		</trigger>
+		<trigger name="client_trainer" id="Trigger-1724" isSystem="false" >
+			<string><![CDATA[CREATE TRIGGER client_trainer
+BEFORE INSERT ON client_trainer
+FOR EACH ROW
+BEGIN
+    SELECT RAISE (ABORT, 'Wrong Gym')
+    WHERE NOT EXISTS (
+        SELECT 1
+        FROM clients
+        JOIN gyms ON gyms.id = clients.gym
+        JOIN trainers ON trainers.gym = gyms.id
+        WHERE NEW.client = clients.id
+        AND NEW.trainer = trainers.id
+        AND trainers.gym = clients.gym
+        );
+END;
+
+-- Make sure client id is correct
+-- Make sure class id is correct
+-- Check if the trainer is signed to the class at the gym in the same city]]></string>
+		</trigger>
+	</schema>
+	<layout name="Layout" id="Layout-2474" show_column_type="y" show_relation="columns" >
+		<entity schema="public" name="cards" color="3986C1" x="255" y="527" />
+		<entity schema="public" name="class_trainer" color="3986C1" x="51" y="527" />
+		<entity schema="public" name="classes" color="3986C1" x="255" y="255" />
+		<entity schema="public" name="client_class" color="3986C1" x="748" y="255" />
+		<entity schema="public" name="client_trainer" color="3986C1" x="306" y="51" />
+		<entity schema="public" name="clients" color="3986C1" x="510" y="255" />
+		<entity schema="public" name="gyms" color="3986C1" x="510" y="527" />
+		<entity schema="public" name="trainers" color="3986C1" x="731" y="527" />
+	</layout>
+</project>
