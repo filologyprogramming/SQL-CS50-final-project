@@ -111,6 +111,6 @@ The main limitation of a table is inability to track what is happening at the gy
 
 Transfers of both clients and trainers reqiures altering a table. In case of trainer substitutions, e.g. during sick leave, the change in the database is also necessary. The remedy would be to keep every instance of class every week.
 
-Individual classes are not kept track of, neither the date nor time.
+Individual classes are not kept track of, neither date nor time.
 
 In case someone decide to leave the gym altogether, their data and record will be kept in the database. A "soft" deletion column would need to be created in clients table together with AFTER UPDATE trigger or temporary turning off the FOREIGN KEY constr
