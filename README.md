@@ -1,6 +1,6 @@
 # Design Document
 
-By Patryk Paszkieiwcz
+By Patryk Paszkiewicz
 
 ## Scope
 
